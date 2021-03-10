@@ -1,4 +1,4 @@
-#include "arch/i386/vga.h"
+#include "io.h"
 
 // 文字を色を指定して出力
 void char_print(char c, char color)
