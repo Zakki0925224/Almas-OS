@@ -1,0 +1,1 @@
+#define VIDEO   0xB8000

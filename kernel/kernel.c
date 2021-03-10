@@ -3,8 +3,10 @@
 
 void cstart(unsigned long magic, unsigned long addr)
 {
-    str_print("Welcome to Almas OS!", 0x0f, 0xb8000);
-    str_print("Hello World!", 0x0f, 0xb802a);
+    cls(1000);
+    str_print("Welcome to ", 0x0f);
+    str_print("Almas OS ", 0x0e);
+    str_print("!", 0x0f);
 
     return;
 }
