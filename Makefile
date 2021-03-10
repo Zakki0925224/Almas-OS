@@ -1,30 +1,27 @@
+
 TARGET = almas.elf
 
 CC = gcc
-LN_S = ln -s
-RANLIB = ranlib
-INCLUDES = -I./include
-FLAGS = -m32 -ffreestanding -fno-common -fno-builtin -fomit-frame-pointer -O2 -c -MMD
+FLAGS = -m32 -ffreestanding -fno-common -fno-builtin -fomit-frame-pointer -O2 -MMD -c
 LD = ld  -melf_i386  -Ttext=0x100000 --oformat elf32-i386 -o
 
 .S.o:
-	${CC} ${INCLUDES} ${FLAGS} $<
+	${CC} ${FLAGS} $<
 .c.o:
-	${CC} ${INCLUDES} ${FLAGS} $<
+	${CC} ${FLAGS} $<
 
-BOOT_S = load.S
-BOOT_C = kernel.c
+LOAD_S = kernel/load.S
+KERNEL_C = kernel/kernel.c
 
-BOOT_OBJ=${BOOT_S:.S=.o} ${BOOT_C:.c=.o}
+BLD=${LOAD_S:.S=.o} ${KERNEL_C:.c=.o} # ここにソースファイルを羅列
+OBJ=$(notdir ${BLD})
 
-${BOOT_OBJ}: ${BOOT_SRC}
-
-almas: ${BOOT_OBJ}
-	${LD} ${TARGET} ${BOOT_OBJ}
+almas: ${BLD}
+	${LD} ${TARGET} ${OBJ}
 
 clean::
-	-${RM}  -f *~ *.lo *.o *.elf *.iso *.d
-	-${RM}  -r isofiles
+	-rm -f *~ *.lo *.o *.elf *.iso *.d
+	-rm -r isofiles
 
 run: clean almas
 	-mkdir isofiles

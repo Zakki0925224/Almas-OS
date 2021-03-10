@@ -1,5 +1,5 @@
 #include "multiboot.h"
-#include "kernel/io.h"
+#include "io.h"
 
 void cstart(unsigned long magic, unsigned long addr)
 {
