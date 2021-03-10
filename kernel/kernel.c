@@ -1,5 +1,5 @@
 #include "multiboot.h"
-#include "io.h"
+#include "grapgic/output.h"
 
 void cstart(unsigned long magic, unsigned long addr)
 {
