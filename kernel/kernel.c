@@ -1,7 +1,7 @@
-#include "multiboot.h"
-#include "graphic/io.h"
+#include <multiboot.h>
+#include <vga.h>
 
-void cstart(unsigned long magic, unsigned long addr, multiboot_info_t *boot_info)
+void kernel_main(unsigned long magic, unsigned long addr, multiboot_info_t *boot_info)
 {
     if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
     {
@@ -9,10 +9,12 @@ void cstart(unsigned long magic, unsigned long addr, multiboot_info_t *boot_info
         return;
     }
 
-    cls(1000);
-    str_print("Welcome to ", 0x0f);
-    str_print("Almas OS ", 0x0e);
-    str_print("!", 0x0f);
+    vga_initialize();
+    str_print("hello world!", 0x0f);
+    newline();
+
+    for (int i = 0; i < 200; i++)
+        str_print("hello world!", 0x0f);
 
     return;
 }

@@ -4,17 +4,18 @@ TARGET = almas.elf
 CC = gcc
 FLAGS = -m32 -ffreestanding -fno-common -fno-builtin -fomit-frame-pointer -O2 -MMD -c
 LD = ld  -melf_i386  -Ttext=0x100000 --oformat elf32-i386 -o
+INCLUDES = -I ./kernel/includes
 
 .S.o:
-	${CC} ${FLAGS} $<
+	${CC} ${INCLUDES} ${FLAGS} $<
 .c.o:
-	${CC} ${FLAGS} $<
+	${CC} ${INCLUDES} ${FLAGS} $<
 
-LOAD_S = kernel/load.S
+LOAD_S = kernel/arch/i386/load.S
+VGA_C = kernel/vga/vga.c
 KERNEL_C = kernel/kernel.c
-OUTPUT_C = kernel/graphic/output.c
 
-BLD=${LOAD_S:.S=.o} ${KERNEL_C:.c=.o} ${OUTPUT_C:.c=.o} # ここにソースファイルを羅列
+BLD=${LOAD_S:.S=.o} ${VGA_C:.c=.o} ${KERNEL_C:.c=.o} # ここにソースファイルを羅列
 OBJ=$(notdir ${BLD})
 
 almas: ${BLD}

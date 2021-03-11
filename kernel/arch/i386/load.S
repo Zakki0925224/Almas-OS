@@ -24,7 +24,7 @@ multiboot_entry:
         pushl   %ebx
         pushl   %eax
 
-        call    EXT_C(cstart)
+        call    EXT_C(kernel_main)
 
 loop:   hlt
         jmp     loop
