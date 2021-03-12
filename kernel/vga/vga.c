@@ -14,32 +14,38 @@ void cls(void)
 void vga_initialize(void)
 {
     cls();
-    cursor_x = 1;
-    cursor_y = 1;
+    cursor_x = 0;
+    cursor_y = 0;
 }
 
 // 画面スクロール（戻れない）
 void vga_scroll(void)
 {
-    
+    unsigned short *buf = (unsigned short *) VGAMEM;
+
+    for (int i = (int)CURSOR_X_MAX; i < (int)CURSOR_X_MAX * (int)CURSOR_Y_MAX; i++)
+        buf[i - (int)CURSOR_X_MAX] = buf[i];
+
+    for (int i = (int)CURSOR_X_MAX * ((int)CURSOR_Y_MAX - 1); i < (int)CURSOR_X_MAX * (int)CURSOR_Y_MAX; i++)
+        buf[i] = 0;
 }
 
 // 改行（端までスペース埋め）
 void newline(void)
 {
-    unsigned short *buf = (unsigned short *) VGAMEM;
+    int x = cursor_x;
+    int y = cursor_y;
 
-    for (int i = (((int)CURSOR_X_MAX * (cursor_y - 1)) + cursor_x - 1); i < (int)CURSOR_X_MAX * cursor_y; i++)
-        buf[i] = (0x0f) << 8 | ' ';
-
-    cursor_x = 1;
-    cursor_y++;
+    for (int i = ((int)CURSOR_X_MAX * (y - 1) + x - 1); i < (int)CURSOR_X_MAX * y; i++)
+        char_print('*', 0x01);
 }
 
 void horizontaltab_print(void)
 {
     for (int i = 0; i < 4; i++)
-        char_print(' ', 0x0f);
+        char_print('*', 0x02);
+
+    cursor_x--; // ズレ防止
 }
 
 // エスケープチェック
@@ -71,17 +77,24 @@ void char_print(char c, char color)
 
         else
         {
+            cursor_x++;
+
             if (cursor_x > (int)CURSOR_X_MAX)
             {
-                cursor_x = 1;
+                cursor_x = 0;
                 cursor_y++;
             }
 
-            if (e_check(c) == 1)
-                break;
+            if (cursor_y > (int)CURSOR_Y_MAX)
+            {
+                vga_scroll();
+                cursor_x = 0;
+                cursor_y = (int)CURSOR_Y_MAX;
+            }
 
-            *buf = ((color) << 8) | c;
-            cursor_x++;
+            if (e_check(c) == 0)
+                *buf = ((color) << 8) | c;
+
             break;
         }
     }
