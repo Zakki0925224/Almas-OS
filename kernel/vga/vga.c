@@ -36,12 +36,23 @@ void newline(void)
     cursor_y++;
 }
 
+void horizontab_print(void)
+{
+    for (int i = 0; i < 4; i++)
+        char_print(' ', 0x0f);
+}
+
 // エスケープチェック
 int e_check(char c)
 {
     if (c == '\n')
     {
         newline();
+        return 1;
+    }
+    else if (c == '\t')
+    {
+        horizontab_print();
         return 1;
     }
     else
@@ -60,6 +71,12 @@ void char_print(char c, char color)
 
         else
         {
+            if (cursor_x > (int)CURSOR_X_MAX)
+            {
+                cursor_x = 1;
+                cursor_y++;
+            }
+
             if (e_check(c) == 1)
                 break;
 

@@ -9,7 +9,9 @@
 void cls(void);
 void vga_initialize(void);
 void vga_scroll(void);
+void char_put(char c, int place, char color);
 void newline(void);
+void horizontab_print(void);
 int e_check(char c);
 void char_print(char c, char color);
 void str_print(char *msg, char color);
