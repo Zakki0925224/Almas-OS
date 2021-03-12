@@ -10,6 +10,7 @@ void cls(void);
 void vga_initialize(void);
 void vga_scroll(void);
 void newline(void);
+int e_check(char c);
 void char_print(char c, char color);
 void str_print(char *msg, char color);
 

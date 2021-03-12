@@ -29,11 +29,23 @@ void newline(void)
 {
     unsigned short *buf = (unsigned short *) VGAMEM;
 
-    for (int i = cursor_x * cursor_y - 1; i < (int)CURSOR_X_MAX * cursor_y; i++)
+    for (int i = (((int)CURSOR_X_MAX * (cursor_y - 1)) + cursor_x - 1); i < (int)CURSOR_X_MAX * cursor_y; i++)
         buf[i] = (0x0f) << 8 | ' ';
 
     cursor_x = 1;
     cursor_y++;
+}
+
+// エスケープチェック
+int e_check(char c)
+{
+    if (c == '\n')
+    {
+        newline();
+        return 1;
+    }
+    else
+        return 0;
 }
 
 // 文字と文字色を指定して出力
@@ -48,12 +60,8 @@ void char_print(char c, char color)
 
         else
         {
-            if (cursor_x > (int)CURSOR_X_MAX)
-                newline();
-
-            if ((cursor_x > (int)CURSOR_X_MAX) &&
-                (cursor_y > (int)CURSOR_Y_MAX))
-                vga_scroll();
+            if (e_check(c) == 1)
+                break;
 
             *buf = ((color) << 8) | c;
             cursor_x++;
