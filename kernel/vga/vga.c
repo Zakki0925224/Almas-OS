@@ -36,7 +36,7 @@ void newline(void)
     cursor_y++;
 }
 
-void horizontab_print(void)
+void horizontaltab_print(void)
 {
     for (int i = 0; i < 4; i++)
         char_print(' ', 0x0f);
@@ -52,7 +52,7 @@ int e_check(char c)
     }
     else if (c == '\t')
     {
-        horizontab_print();
+        horizontaltab_print();
         return 1;
     }
     else
