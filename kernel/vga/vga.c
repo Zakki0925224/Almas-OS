@@ -14,8 +14,8 @@ void cls(void)
 void vga_initialize(void)
 {
     cls();
-    cursor_x = 0;
-    cursor_y = 0;
+    cursor_x = 1;
+    cursor_y = 1;
 }
 
 // 画面スクロール（戻れない）
@@ -77,23 +77,23 @@ void char_print(char c, char color)
 
         else
         {
+            if (e_check(c) == 0)
+                *buf = ((color) << 8) | c;
+
             cursor_x++;
 
             if (cursor_x > (int)CURSOR_X_MAX)
             {
-                cursor_x = 0;
+                cursor_x = 1;
                 cursor_y++;
             }
 
             if (cursor_y > (int)CURSOR_Y_MAX)
             {
                 vga_scroll();
-                cursor_x = 0;
+                cursor_x = 1;
                 cursor_y = (int)CURSOR_Y_MAX;
             }
-
-            if (e_check(c) == 0)
-                *buf = ((color) << 8) | c;
 
             break;
         }

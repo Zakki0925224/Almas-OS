@@ -11,8 +11,12 @@ void kernel_main(unsigned long magic, unsigned long addr, multiboot_info_t *boot
         return;
     }
 
-    for (int i = 0; i < CURSOR_Y_MAX + 5; i++)
-        str_print("\t\n", 0x0f);
+    for (int i = 0; i < 1340; i++)
+    {
+        str_print("Hello", 0x02);
+        str_print("World", 0x03);
+        str_print("World", 0x04);
+    }
 
     return;
 }
