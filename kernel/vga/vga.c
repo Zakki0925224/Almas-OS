@@ -37,15 +37,13 @@ void newline(void)
     int y = cursor_y;
 
     for (int i = ((int)CURSOR_X_MAX * (y - 1) + x - 1); i < (int)CURSOR_X_MAX * y; i++)
-        char_print('*', 0x01);
+        char_print(' ', 0x0f);
 }
 
 void horizontaltab_print(void)
 {
     for (int i = 0; i < 4; i++)
-        char_print('*', 0x02);
-
-    cursor_x--; // ズレ防止
+        char_print(' ', 0x0f);
 }
 
 // エスケープチェック
@@ -79,6 +77,8 @@ void char_print(char c, char color)
         {
             if (e_check(c) == 0)
                 *buf = ((color) << 8) | c;
+            else
+                break;
 
             cursor_x++;
 
