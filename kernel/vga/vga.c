@@ -37,13 +37,13 @@ void newline(void)
     int y = cursor_y;
 
     for (int i = ((int)CURSOR_X_MAX * (y - 1) + x - 1); i < (int)CURSOR_X_MAX * y; i++)
-        char_print(' ', 0x0f);
+        cprint(' ', 0x0f);
 }
 
 void horizontaltab_print(void)
 {
     for (int i = 0; i < 4; i++)
-        char_print(' ', 0x0f);
+        cprint(' ', 0x0f);
 }
 
 // エスケープチェック
@@ -64,7 +64,7 @@ int e_check(char c)
 }
 
 // 文字と文字色を指定して出力
-void char_print(char c, char color)
+void cprint(char c, char color)
 {
     unsigned short *buf = (unsigned short *) VGAMEM;
 
@@ -100,10 +100,56 @@ void char_print(char c, char color)
     }
 }
 
-void str_print(char *msg, char color)
+void sprint(char *msg, char color)
 {
-    unsigned short *buf = (unsigned short *) VGAMEM;
-
     for (int i = 0; msg[i] != '\0'; i++)
-        char_print(msg[i], color);
+        cprint(msg[i], color);
+}
+
+char num_to_char(int d)
+{
+    if (d == 0 ||
+        d == 1 ||
+        d == 2 ||
+        d == 3 ||
+        d == 4 ||
+        d == 5 ||
+        d == 6 ||
+        d == 7 ||
+        d == 8 ||
+        d == 9)
+        return '0' + d;
+}
+
+void iprint(int i, char color)
+{
+    if (i == 0)
+    {
+        sprint("0", color);
+        return;
+    }
+
+    if (i < 0)
+    {
+        sprint("-", color);
+        i *= -1;
+    }
+
+    int digits;
+    int j = i;
+    int k = 1;
+
+    // 桁数の計算
+    for (digits = 0; j != 0; digits++)
+        j /= 10;
+
+    char str[digits];
+
+    for (digits -= 1; digits >= 0; digits--)
+    {
+        str[digits] = num_to_char((i / k) % 10);
+        k *= 10;
+    }
+
+    sprint(str, color);
 }

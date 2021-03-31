@@ -13,7 +13,9 @@ void char_put(char c, int place, char color);
 void newline(void);
 void horizontab_print(void);
 int e_check(char c);
-void char_print(char c, char color);
-void str_print(char *msg, char color);
+void cprint(char c, char color);
+void sprint(char *msg, char color);
+char num_to_char(int d);
+void iprint(int i, char color);
 
 #endif
